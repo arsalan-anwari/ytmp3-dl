@@ -1,0 +1,79 @@
+[project]
+name = "ytmp3-dl"
+dynamic = ["version"]
+description = "Download a YouTube playlist as tagged MP3 files with cover art."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Arsalan Anwari", email = "arsalan@anwari.nl" }]
+keywords = ["youtube", "yt-dlp", "mp3", "playlist", "id3", "cover-art", "music"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "yt-dlp>=2024.8.6",
+    # Ships the JavaScript YouTube needs to solve its "n challenge"; without it
+    # only storyboard images are offered. Requires a JS runtime on PATH.
+    "yt-dlp-ejs>=0.8",
+    "mutagen>=1.47",
+    "httpx>=0.27",
+    "typer>=0.12",
+    "rich>=13.7",
+    "pillow>=10.3",
+]
+
+[project.urls]
+Homepage = "https://github.com/arsalan-anwari/ytmp3-dl"
+Documentation = "https://github.com/arsalan-anwari/ytmp3-dl/wiki"
+Source = "https://github.com/arsalan-anwari/ytmp3-dl"
+Issues = "https://github.com/arsalan-anwari/ytmp3-dl/issues"
+Changelog = "https://github.com/arsalan-anwari/ytmp3-dl/blob/main/CHANGELOG.md"
+
+[project.scripts]
+ytmp3 = "ytmp3.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+# Single source of truth for the version; scripts/release.sh reads the same file.
+[tool.hatch.version]
+path = "src/ytmp3/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ytmp3"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "docs", "README.md", "CHANGELOG.md", "LICENSE", "NOTICE"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.2",
+    "ruff>=0.5",
+]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# typer declares CLI flags as function-call defaults; that is the intended idiom.
+"src/ytmp3/cli.py" = ["B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
