@@ -1,5 +1,12 @@
 # ytmp3-dl
 
+[![CI](https://github.com/arsalan-anwari/ytmp3-dl/actions/workflows/ci.yml/badge.svg)](https://github.com/arsalan-anwari/ytmp3-dl/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/ytmp3-dl)](https://pypi.org/project/ytmp3-dl/)
+[![Python](https://img.shields.io/pypi/pyversions/ytmp3-dl)](https://pypi.org/project/ytmp3-dl/)
+[![Downloads](https://img.shields.io/pypi/dm/ytmp3-dl)](https://pypi.org/project/ytmp3-dl/)
+[![Licence](https://img.shields.io/pypi/l/ytmp3-dl)](LICENSE)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 Download a YouTube playlist as tagged MP3 files, with album art looked up automatically.
 
 - Extracts the best audio stream with [yt-dlp](https://github.com/yt-dlp/yt-dlp), converts it with ffmpeg.
@@ -63,6 +70,7 @@ Full docs live in the [wiki](https://github.com/arsalan-anwari/ytmp3-dl/wiki), a
 uv sync
 uv run pytest
 uv run ruff check .
+scripts/test_ci.sh           # the whole CI gate, locally
 ```
 
 ## Licence and use

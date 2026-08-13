@@ -36,9 +36,7 @@ _FEAT = re.compile(
 )
 
 # Uploader suffixes that are not part of the artist name.
-_CHANNEL_SUFFIX = re.compile(
-    r"\s*-\s*(?:topic|official|vevo|music|records?|tv)\s*$", re.IGNORECASE
-)
+_CHANNEL_SUFFIX = re.compile(r"\s*-\s*(?:topic|official|vevo|music|records?|tv)\s*$", re.IGNORECASE)
 
 _ILLEGAL_FS = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
 _WS = re.compile(r"\s+")
@@ -98,9 +96,11 @@ def parse_track(info: dict) -> TrackName:
         # YouTube Music entries carry proper fields; artists come comma/`;`-separated.
         primary = re.split(r"\s*[,;]\s*|\s+&\s+", artist)[0] if artist else None
         title, featuring = split_featuring(strip_junk(track))
-        return TrackName(artist=primary or clean_uploader(info.get("uploader")),
-                         title=title or track,
-                         featuring=featuring)
+        return TrackName(
+            artist=primary or clean_uploader(info.get("uploader")),
+            title=title or track,
+            featuring=featuring,
+        )
 
     raw = strip_junk(info.get("title") or info.get("id") or "untitled")
     parts = _ARTIST_SEP.split(raw, maxsplit=1)
@@ -126,7 +126,10 @@ def safe_filename(text: str, max_length: int = 120) -> str:
     if not text:
         return "untitled"
     if text.upper() in {
-        "CON", "PRN", "AUX", "NUL",
+        "CON",
+        "PRN",
+        "AUX",
+        "NUL",
         *(f"COM{i}" for i in range(1, 10)),
         *(f"LPT{i}" for i in range(1, 10)),
     }:

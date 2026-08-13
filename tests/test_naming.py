@@ -18,9 +18,7 @@ def test_parse_title_with_artist_separator():
 
 
 def test_parse_prefers_music_metadata():
-    name = parse_track(
-        {"title": "whatever", "track": "Real Title", "artist": "Real Artist, Other"}
-    )
+    name = parse_track({"title": "whatever", "track": "Real Title", "artist": "Real Artist, Other"})
     assert (name.artist, name.title) == ("Real Artist", "Real Title")
 
 

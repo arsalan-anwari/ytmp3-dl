@@ -22,15 +22,22 @@ uv run ytmp3 "<url>" --dry-run
 
 The distribution is `ytmp3-dl`, the import package and console command are both `ytmp3`.
 
-`downloader.py` owns the flow: `fetch_playlist` flat-extracts the entries, then
-`PlaylistDownloader` runs `_process` per entry on a thread pool, probe, download, convert,
-look up art, tag. It reports through an `on_event` callback so `cli.py` can render progress
-without the pipeline knowing about rich.
+`downloader.py` owns the flow: `fetch_playlist` flat-extracts the entries, then `PlaylistDownloader` runs `_process` per entry on a thread pool, probe, download, convert, look up art, tag. It reports through an `on_event` callback so `cli.py` can render progress without the pipeline knowing about rich.
 
 ## Tests
 
-`pytest`, no network. Parsing and image handling are pure functions and are tested directly;
-the provider calls are not, so changes there need a manual run against a real playlist.
+`pytest`, no network. Parsing and image handling are pure functions and are tested directly; the provider calls are not, so changes there need a manual run against a real playlist.
+
+## CI
+
+`.github/workflows/ci.yml` runs ruff, pytest on 3.10–3.13, and a build with `twine check`, on every push to `main` and every pull request.
+
+```bash
+scripts/test_ci.sh           # the same gate locally, then act if it is installed
+scripts/test_ci.sh --no-act  # local gate only
+scripts/test_ci.sh --fix     # apply ruff fixes first
+```
+
 
 ## Releasing
 
@@ -45,21 +52,15 @@ scripts/release.sh                 # upload to PyPI
 scripts/release.sh --tag           # also create the v0.2.0 git tag
 ```
 
-The script refuses to run on a dirty tree, runs ruff and pytest, rebuilds `dist/` from scratch,
-and asks before uploading. Credentials come from `UV_PUBLISH_TOKEN` or a trusted-publisher
-setup; nothing is stored in the repo.
+The script refuses to run on a dirty tree, runs ruff and pytest, rebuilds `dist/` from scratch, and asks before uploading. Credentials come from `UV_PUBLISH_TOKEN` or a trusted-publisher setup; nothing is stored in the repo.
 
 ## Syncing the wiki
 
-`docs/` is the source; the GitHub wiki is a mirror. Filenames map directly to page names, so
-`docs/Cover-Art.md` is the *Cover Art* page and `docs/Home.md` is the landing page. Keep the
-directory flat. The wiki has no subdirectories and link between pages as `[Usage](Usage.md)`,
-which works when browsing the repo; the sync script drops the `.md` so it works in the wiki too.
-
+`docs/` is the source; the GitHub wiki is a mirror. Filenames map directly to page names, so `docs/Cover-Art.md` is the *Cover Art* page and `docs/Home.md` is the landing page. Keep the directory flat. The wiki has no subdirectories and link between pages as `[Usage](Usage.md)`,
+which works when browsing the repo; the sync script drops the `.md` so it works in the wiki too. 
 ```bash
 scripts/sync-wiki.sh --dry-run
 scripts/sync-wiki.sh
 ```
 
-It clones the wiki to `../ytmp3-dl.wiki`, copies `docs/` over it, and commits and pushes only
-if something changed.
+It clones the wiki to `../ytmp3-dl.wiki`, copies `docs/` over it, and commits and pushes only if something changed.

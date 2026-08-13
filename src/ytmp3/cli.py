@@ -44,7 +44,7 @@ def _show_version(value: bool) -> None:
 
 
 @app.command()
-def download(  # noqa: PLR0913; a CLI is allowed to have many flags
+def download(  # noqa: PLR0913 - a CLI is allowed to have many flags
     url: str = typer.Argument(..., help="Playlist or video URL."),
     output: Path = typer.Option(
         Path("downloads"), "--output", "-o", help="Directory to write MP3s into."
@@ -167,9 +167,7 @@ def _run(url: str, settings: Settings) -> RunReport:
     def on_event(name: str, data: dict[str, Any]) -> None:
         nonlocal task_id
         if name == "playlist":
-            console.print(
-                f"[bold]{data['title']}[/bold] — {data['count']} track(s)"
-            )
+            console.print(f"[bold]{data['title']}[/bold] — {data['count']} track(s)")
             task_id = progress.add_task("Downloading", total=data["count"])
         elif name == "track_done" and task_id is not None:
             result: TrackResult = data["result"]

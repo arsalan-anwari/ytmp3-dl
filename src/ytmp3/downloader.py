@@ -74,7 +74,8 @@ class Archive:
         self._ids: set[str] = set()
         if path and path.exists():
             self._ids = {
-                line.strip() for line in path.read_text(encoding="utf-8").splitlines()
+                line.strip()
+                for line in path.read_text(encoding="utf-8").splitlines()
                 if line.strip()
             }
 
@@ -177,9 +178,7 @@ class PlaylistDownloader:
         self.settings = settings
         self._emit = on_event or (lambda _name, _data: None)
         self._archive = Archive(settings.archive)
-        self._finder = (
-            CoverFinder(size=settings.cover_size) if settings.covers else None
-        )
+        self._finder = CoverFinder(size=settings.cover_size) if settings.covers else None
 
     def close(self) -> None:
         if self._finder is not None:
